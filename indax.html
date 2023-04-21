@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mi Lista de Tareas</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			margin: 0;
+			padding: 0;
+			background-color: #f7f7f7;
+			color: #333;
+		}
+		h1 {
+			margin: 0;
+			padding: 20px;
+			background-color: #333;
+			color: #fff;
+			text-align: center;
+		}
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+		.form {
+			display: flex;
+			margin-bottom: 20px;
+		}
+		.form-input {
+			flex: 1;
+			margin-right: 10px;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			font-size: 16px;
+		}
+		.form-button {
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			background-color: #333;
+			color: #fff;
+			font-size: 16px;
+			cursor: pointer;
+		}
+		.list {
+			list-style-type: none;
+			padding-left: 0;
+			margin-bottom: 20px;
+			background-color: #fff;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+		}
+		.list-item {
+			display: flex;
+			align-items: center;
+			padding: 10px;
+			border-bottom: 1px solid #ccc;
+		}
+		.list-item:last-child {
+			border-bottom: none;
+		}
+		.list-item-check {
+			margin-right: 10px;
+			width: 20px;
+			height: 20px;
+			border: 1px solid #ccc;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			cursor: pointer;
+		}
+		.list-item-check.checked {
+			background-color: #333;
+			color: #fff;
+			border-color: #333;
+		}
+		.list-item-text {
+			flex: 1;
+		}
+		.list-item-remove {
+			padding: 5px;
+			border: none;
+			border-radius: 5px;
+			background-color: #ccc;
+			color: #fff;
+			font-size: 16px;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
+		.list-item-remove:hover {
+			background-color: #333;
+		}
+		.clock {
+			font-size: 24px;
+			text-align: center;
+			color: #333;
+			background-color: #fff;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+			padding: 10px;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Mi Lista de Tareas</h1>
+	<div class="container">
+		<form class="form" id="form">
+			<input class="form-input" type="text" placeholder="Agregar tarea...">
+            <input class="form-button" type="submit" value="Agregar">
+	</form>
+	<ul class="list" id="list">
+	</ul>
+	<div class="clock" id="clock">
+	</div>
+</div>
+
+<script>
+	// Obtener referencias a los elementos de la página
+	const form = document.querySelector('#form');
+	const list = document.querySelector('#list');
+	const clock = document.querySelector('#clock');
+
+	// Obtener la hora actual y actualizar el reloj cada segundo
+	function updateClock() {
+		const now = new Date();
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+		const seconds = now.getSeconds();
+		clock.innerHTML = `${hours}:${minutes}:${seconds}`;
+	}
+	setInterval(updateClock, 1000);
+
+	// Función para agregar una tarea a la lista
+	function addTask(task) {
+		// Crear un elemento li y un elemento span para la tarea
+		const li = document.createElement('li');
+		const span = document.createElement('span');
+		span.classList.add('list-item-text');
+		span.textContent = task;
+
+		// Crear un elemento button para eliminar la tarea
+		const button = document.createElement('button');
+		button.classList.add('list-item-remove');
+		button.textContent = 'Quitar';
+		button.addEventListener('click', () => {
+			li.remove();
+		});
+
+		// Crear un elemento checkbox para marcar la tarea como completada
+		const checkbox = document.createElement('div');
+		checkbox.classList.add('list-item-check');
+		checkbox.addEventListener('click', () => {
+			checkbox.classList.toggle('checked');
+			span.classList.toggle('checked');
+		});
+
+		// Agregar los elementos a la lista
+		li.appendChild(checkbox);
+		li.appendChild(span);
+		li.appendChild(button);
+		list.appendChild(li);
+	}
+
+	// Agregar una tarea cuando se envíe el formulario
+	form.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const task = form.elements['task'].value;
+		if (task) {
+			addTask(task);
+			form.reset();
+		}
+	});
+</script>
+            
